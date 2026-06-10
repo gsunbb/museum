@@ -4,26 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>🗺️ 서울 역사 탐방 — 우리가 만든 소개 포스터</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --museum-bg:   #EEF0FF;
-      --museum-mid:  #6C75E0;
-      --museum-dark: #3A3FA0;
-      --memorial-bg: #FFF0EC;
-      --memorial-mid:#E05A30;
-      --memorial-dark:#9C3310;
-      --heritage-bg: #EDFAF0;
-      --heritage-mid:#3AAA5A;
-      --heritage-dark:#1E6E35;
       --cream: #FFFDF7;
       --ink:   #1A1A1A;
       --muted: #6B6B6B;
-      --radius: 16px;
-      --radius-sm: 10px;
     }
 
     body {
@@ -33,500 +21,432 @@
       min-height: 100vh;
     }
 
-    /* ── HERO ── */
-    .hero {
+    /* ── PAGE HEADER ── */
+    .page-header {
       text-align: center;
-      padding: 3rem 1.5rem 2rem;
+      padding: 2.5rem 1.5rem 1.5rem;
       background: linear-gradient(180deg, #FFF8E7 0%, var(--cream) 100%);
       border-bottom: 2px dashed #E8D8A0;
     }
-    .hero-stamp {
+    .page-stamp {
       display: inline-block;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: .12em;
-      color: #A07830;
-      background: #FFF0C0;
-      border: 2px solid #E8C860;
-      border-radius: 999px;
-      padding: 4px 14px;
-      margin-bottom: 14px;
+      font-size: 12px; font-weight: 700; letter-spacing: .12em;
+      color: #A07830; background: #FFF0C0;
+      border: 2px solid #E8C860; border-radius: 999px;
+      padding: 3px 12px; margin-bottom: 10px;
     }
-    .hero h1 {
-      font-size: clamp(26px, 5vw, 42px);
-      font-weight: 900;
-      line-height: 1.2;
-      margin-bottom: 10px;
-    }
-    .hero-sub {
-      font-size: 16px;
-      color: var(--muted);
-      margin-bottom: 2rem;
+    .page-header h1 { font-size: clamp(22px, 4vw, 32px); font-weight: 900; }
+
+    /* ── MAIN STAGE ── */
+    .stage {
+      max-width: 620px; margin: 0 auto;
+      padding: 2rem 1.5rem 4rem;
+      display: flex; flex-direction: column; align-items: center; gap: 0;
     }
 
-    /* ── TAB BAR ── */
-    .tab-bar {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
+    /* ── SPEECH BUBBLE ── */
+    .bubble {
+      position: relative;
+      background: #FFF8E8;
+      border: 2.5px solid #F0C040;
+      border-radius: 20px;
+      padding: 14px 22px;
+      max-width: 360px; width: 100%;
+      text-align: center;
+      margin-bottom: 6px;
+      min-height: 58px;
+      display: flex; align-items: center; justify-content: center;
     }
-    .tab-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 12px 22px;
-      border-radius: 999px;
-      border: 3px solid transparent;
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all .18s;
-      outline: none;
+    .bubble::after {
+      content: '';
+      position: absolute; bottom: -18px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 12px solid transparent; border-right: 12px solid transparent;
+      border-top: 18px solid #F0C040;
     }
-    .tab-btn .icon { font-size: 20px; }
-    .tab-btn .cnt {
-      background: rgba(0,0,0,.12);
-      border-radius: 999px;
-      padding: 1px 8px;
-      font-size: 12px;
+    .bubble::before {
+      content: '';
+      position: absolute; bottom: -13px; left: 50%; transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 10px solid transparent; border-right: 10px solid transparent;
+      border-top: 14px solid #FFF8E8;
+      z-index: 1;
     }
+    .bubble-text { font-size: 15px; font-weight: 700; color: #5A3A10; line-height: 1.5; }
+    .cursor {
+      display: inline-block; width: 2px; height: 16px;
+      background: #F0A000; margin-left: 2px;
+      animation: blink .7s steps(1) infinite; vertical-align: middle;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0} }
 
-    .tab-btn.museum   { background: var(--museum-bg);   color: var(--museum-dark);   border-color: var(--museum-bg); }
-    .tab-btn.memorial { background: var(--memorial-bg); color: var(--memorial-dark); border-color: var(--memorial-bg); }
-    .tab-btn.heritage { background: var(--heritage-bg); color: var(--heritage-dark); border-color: var(--heritage-bg); }
+    /* ── FOX ── */
+    .fox-wrap { width: 110px; height: 110px; flex-shrink: 0; }
+    .fox-bounce { animation: foxBounce 2.4s ease-in-out infinite; }
+    @keyframes foxBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
 
-    .tab-btn.museum.active,   .tab-btn.museum:hover   { background: var(--museum-mid);   color: #fff; border-color: var(--museum-mid); }
-    .tab-btn.memorial.active, .tab-btn.memorial:hover { background: var(--memorial-mid); color: #fff; border-color: var(--memorial-mid); }
-    .tab-btn.heritage.active, .tab-btn.heritage:hover { background: var(--heritage-mid); color: #fff; border-color: var(--heritage-mid); }
-
-    /* ── SECTION ── */
-    .section { display: none; padding: 2rem 1.5rem 4rem; max-width: 1100px; margin: 0 auto; }
-    .section.active { display: block; }
-
-    .section-label {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 1.5rem;
+    /* ── TOPIC CARDS ── */
+    .topic-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px; width: 100%; margin-top: 28px;
+      opacity: 0; transform: translateY(16px); transition: all .5s ease;
     }
-    .section-label-dot {
-      width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+    .topic-row.show { opacity: 1; transform: translateY(0); }
+
+    .topic-card {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 8px; padding: 20px 12px 16px;
+      border-radius: 20px; border: 3px solid transparent;
+      cursor: pointer; transition: transform .18s, box-shadow .18s;
+      background: #fff; text-align: center;
     }
-    .section-label h2 { font-size: 20px; font-weight: 900; }
-    .section-label p  { font-size: 13px; color: var(--muted); margin-left: auto; }
+    .topic-card:hover { transform: translateY(-5px) scale(1.03); box-shadow: 0 10px 28px rgba(0,0,0,.13); }
+    .topic-card.history  { background: #FFF3E0; border-color: #FFCC80; }
+    .topic-card.science  { background: #E8F4FD; border-color: #90CAF9; }
+    .topic-card.life     { background: #F3E5F5; border-color: #CE93D8; }
+    .topic-card.language { background: #E8F5E9; border-color: #A5D6A7; }
+    .topic-card .t-icon  { font-size: 38px; line-height: 1; }
+    .topic-card .t-name  { font-size: 16px; font-weight: 900; color: #1A1A1A; }
+    .topic-card .t-count { font-size: 12px; color: #888; }
+
+    /* ── POSTER SECTION ── */
+    .poster-section {
+      width: 100%; margin-top: 20px;
+      opacity: 0; transform: translateY(20px); transition: all .45s ease;
+      display: none;
+    }
+    .poster-section.show { opacity: 1; transform: translateY(0); display: block; }
+
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: none; border: 2px solid #D0C8B0; border-radius: 999px;
+      padding: 6px 16px; font-family: inherit; font-size: 13px; font-weight: 700;
+      color: #7A6840; cursor: pointer; margin-bottom: 18px; transition: background .15s;
+    }
+    .back-btn:hover { background: #F5EED8; }
+
+    /* ── TYPE BADGES ── */
+    .badge {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      padding: 2px 9px; border-radius: 999px; margin-left: 6px;
+      vertical-align: middle;
+    }
+    .badge.museum   { background: #EEF0FF; color: #3A3FA0; }
+    .badge.memorial { background: #FFF0EC; color: #9C3310; }
+    .badge.heritage { background: #EDFAF0; color: #1E6E35; }
 
     /* ── PLACE GROUPS ── */
-    .place-group { margin-bottom: 2.5rem; }
-    .place-name-bar {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 1rem;
-      padding-bottom: 8px;
-      border-bottom: 2px solid #E8E0D0;
+    .place-group { margin-bottom: 24px; }
+    .place-bar {
+      display: flex; align-items: center; gap: 8px;
+      margin-bottom: 10px; padding-bottom: 8px;
+      border-bottom: 2px dashed #E8D8B0;
     }
-    .place-name-bar .place-icon { font-size: 18px; }
-    .place-name-bar h3 { font-size: 17px; font-weight: 700; }
-    .place-name-bar .poster-count {
-      margin-left: auto;
-      font-size: 12px;
-      color: var(--muted);
-    }
+    .place-bar h3 { font-size: 16px; font-weight: 900; color: #1A1A1A; }
+    .place-bar .pcnt { margin-left: auto; font-size: 12px; color: #999; }
 
     /* ── POSTER GRID ── */
-    .poster-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 14px;
+    .poster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 12px; }
+    .p-card {
+      border-radius: 14px; overflow: hidden;
+      border: 2px solid #E8E0D0; background: #fff;
+      cursor: pointer; transition: transform .15s, box-shadow .15s;
     }
-
-    .poster-card {
-      border-radius: var(--radius);
-      overflow: hidden;
-      border: 2px solid #E8E0D0;
-      background: #fff;
-      cursor: pointer;
-      transition: transform .15s, box-shadow .15s, border-color .15s;
-      text-decoration: none;
-      display: block;
-    }
-    .poster-card:hover {
-      transform: translateY(-4px) rotate(.5deg);
-      box-shadow: 0 8px 24px rgba(0,0,0,.12);
-      border-color: #C0B080;
-    }
-    .poster-card:focus { outline: 3px solid #6C75E0; outline-offset: 2px; }
-
-    .poster-thumb {
-      width: 100%;
-      aspect-ratio: 210/297;
-      object-fit: cover;
-      display: block;
-    }
-    .poster-thumb-placeholder {
-      width: 100%;
-      aspect-ratio: 210/297;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 8px;
-      font-size: 28px;
-    }
-    .poster-info {
-      padding: 8px 10px 10px;
-      border-top: 1px solid #F0E8D8;
-    }
-    .poster-info .place-label {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--ink);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .p-card:hover { transform: translateY(-4px) rotate(.4deg); box-shadow: 0 8px 20px rgba(0,0,0,.13); }
+    .p-card img { width: 100%; aspect-ratio: 210/297; object-fit: cover; display: block; }
+    .p-card .p-name {
+      padding: 6px 8px; font-size: 12px; font-weight: 700;
+      color: #1A1A1A; border-top: 1px solid #F0E8D8;
     }
 
     /* ── LIGHTBOX ── */
-    .lightbox {
-      position: fixed;
-      inset: 0;
-      background: rgba(10,8,5,.85);
-      z-index: 1000;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5rem;
+    .lb-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.6); z-index: 999;
+      align-items: center; justify-content: center; padding: 1rem;
     }
-    .lightbox.open { display: flex; }
-    .lightbox-inner {
-      position: relative;
-      max-width: 540px;
-      width: 100%;
-      background: #fff;
-      border-radius: 20px;
-      overflow: hidden;
-      box-shadow: 0 24px 80px rgba(0,0,0,.5);
+    .lb-overlay.open { display: flex; }
+    .lb-box {
+      background: #fff; border-radius: 20px; overflow: hidden;
+      max-width: 420px; width: 100%; box-shadow: 0 20px 60px rgba(0,0,0,.4);
     }
-    .lightbox-img {
-      width: 100%;
-      max-height: 80vh;
-      object-fit: contain;
-      display: block;
+    .lb-box img { width: 100%; max-height: 78vh; object-fit: contain; display: block; }
+    .lb-foot {
+      padding: 10px 16px; display: flex; align-items: center;
+      justify-content: space-between; border-top: 1px solid #F0E8D8;
     }
-    .lightbox-img-placeholder {
-      width: 100%;
-      aspect-ratio: 210/297;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
+    .lb-foot span { font-size: 15px; font-weight: 700; color: #1A1A1A; }
+    .lb-close {
+      background: #1A1A1A; color: #fff; border: none;
+      border-radius: 10px; padding: 7px 16px;
+      font-family: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
     }
-    .lightbox-footer {
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid #F0E8D8;
-    }
-    .lightbox-footer .lb-name  { font-size: 16px; font-weight: 700; }
-    .lightbox-footer .lb-student { font-size: 13px; color: var(--muted); }
-    .lightbox-close {
-      background: var(--ink);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-sm);
-      padding: 8px 16px;
-      font-family: inherit;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .lightbox-close:hover { background: #444; }
 
-    /* ── FOOTER ── */
     footer {
-      text-align: center;
-      padding: 2rem;
-      font-size: 13px;
-      color: #B0A080;
+      text-align: center; padding: 2rem;
+      font-size: 13px; color: #B0A080;
       border-top: 2px dashed #E8D8A0;
     }
 
-    /* ── RESPONSIVE ── */
-    @media (max-width: 480px) {
-      .tab-btn { padding: 10px 14px; font-size: 13px; }
-      .poster-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+    @media (max-width: 400px) {
+      .topic-row { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .topic-card { padding: 14px 8px 12px; }
+      .poster-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); }
     }
   </style>
 </head>
 <body>
 
-<header class="hero">
-  <div class="hero-stamp">4학년 4반 사회 탐구 프로젝트</div>
+<header class="page-header">
+  <div class="page-stamp">4학년 4반 사회 탐구 프로젝트</div>
   <h1>🗺️ 서울 역사 탐방</h1>
-  <p class="hero-sub">우리가 직접 조사하고 만든 소개 포스터예요!</p>
-  <nav class="tab-bar" role="tablist">
-    <button class="tab-btn museum active" role="tab" aria-selected="true"  onclick="switchTab('museum',this)">
-      <span class="icon">🏛️</span> 박물관 <span class="cnt" id="cnt-museum">0</span>
-    </button>
-    <button class="tab-btn memorial" role="tab" aria-selected="false" onclick="switchTab('memorial',this)">
-      <span class="icon">🎖️</span> 기념관 <span class="cnt" id="cnt-memorial">0</span>
-    </button>
-    <button class="tab-btn heritage" role="tab" aria-selected="false" onclick="switchTab('heritage',this)">
-      <span class="icon">🏯</span> 유적지 <span class="cnt" id="cnt-heritage">0</span>
-    </button>
-  </nav>
 </header>
 
-<main>
-  <div class="section active" id="tab-museum" role="tabpanel"></div>
-  <div class="section"        id="tab-memorial" role="tabpanel"></div>
-  <div class="section"        id="tab-heritage" role="tabpanel"></div>
+<main class="stage">
+
+  <div class="bubble" id="bubble">
+    <div class="bubble-text" id="bubbleText"><span class="cursor"></span></div>
+  </div>
+
+  <div class="fox-wrap">
+    <div class="fox-bounce">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" width="110" height="110">
+        <polygon points="22,52 8,18 42,40" fill="#E87020"/>
+        <polygon points="98,52 112,18 78,40" fill="#E87020"/>
+        <polygon points="24,50 14,24 40,42" fill="#F0B060"/>
+        <polygon points="96,50 106,24 80,42" fill="#F0B060"/>
+        <ellipse cx="60" cy="62" rx="38" ry="34" fill="#E87020"/>
+        <ellipse cx="60" cy="68" rx="26" ry="22" fill="#FAE8C8"/>
+        <ellipse cx="46" cy="58" rx="8" ry="9" fill="#fff"/>
+        <ellipse cx="74" cy="58" rx="8" ry="9" fill="#fff"/>
+        <ellipse cx="47" cy="59" rx="5" ry="6" fill="#2A1A08"/>
+        <ellipse cx="75" cy="59" rx="5" ry="6" fill="#2A1A08"/>
+        <circle cx="49" cy="56" r="2" fill="#fff"/>
+        <circle cx="77" cy="56" r="2" fill="#fff"/>
+        <ellipse cx="60" cy="72" rx="5" ry="3.5" fill="#C84010"/>
+        <path d="M52 76 Q60 82 68 76" stroke="#C84010" stroke-width="2" fill="none" stroke-linecap="round"/>
+        <ellipse cx="38" cy="70" rx="7" ry="5" fill="#F0A060" opacity=".5"/>
+        <ellipse cx="82" cy="70" rx="7" ry="5" fill="#F0A060" opacity=".5"/>
+        <ellipse cx="60" cy="104" rx="28" ry="18" fill="#E87020"/>
+        <ellipse cx="60" cy="106" rx="18" ry="12" fill="#FAE8C8"/>
+        <path d="M88 100 Q108 88 104 72 Q100 62 92 68 Q88 72 90 80 Q92 90 88 100" fill="#E87020"/>
+        <path d="M102 70 Q100 62 92 68 Q88 74 91 82" fill="#FAE8C8"/>
+      </svg>
+    </div>
+  </div>
+
+  <div class="topic-row" id="topicRow">
+    <div class="topic-card history"  onclick="selectTopic('history')">
+      <div class="t-icon">🏺</div>
+      <div class="t-name">역사</div>
+      <div class="t-count">포스터 17장</div>
+    </div>
+    <div class="topic-card science"  onclick="selectTopic('science')">
+      <div class="t-icon">✈️</div>
+      <div class="t-name">과학·기술</div>
+      <div class="t-count">포스터 2장</div>
+    </div>
+    <div class="topic-card life"     onclick="selectTopic('life')">
+      <div class="t-icon">🏘️</div>
+      <div class="t-name">생활모습</div>
+      <div class="t-count">포스터 8장</div>
+    </div>
+    <div class="topic-card language" onclick="selectTopic('language')">
+      <div class="t-icon">🔤</div>
+      <div class="t-name">언어·문자</div>
+      <div class="t-count">포스터 1장</div>
+    </div>
+  </div>
+
+  <div class="poster-section" id="posterSection">
+    <button class="back-btn" onclick="goBack()">← 다시 고르기</button>
+    <div id="posterContent"></div>
+  </div>
+
 </main>
 
-<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLB()">
-  <div class="lightbox-inner">
-    <img class="lightbox-img" id="lb-img" src="" alt="" style="display:none;">
-    <div class="lightbox-img-placeholder" id="lb-placeholder" style="display:none;"></div>
-    <div class="lightbox-footer">
-      <div>
-        <div class="lb-name"    id="lb-name"></div>
-        <div class="lb-student" id="lb-student"></div>
-      </div>
-      <button class="lightbox-close" onclick="closeLB()">닫기 ✕</button>
+<footer>서울 ○○초등학교 4학년 4반 · 2025년 사회 탐구 프로젝트</footer>
+
+<div class="lb-overlay" id="lb" onclick="if(event.target===this)closeLB()">
+  <div class="lb-box">
+    <img id="lbImg" src="" alt="">
+    <div class="lb-foot">
+      <span id="lbName"></span>
+      <button class="lb-close" onclick="closeLB()">닫기 ✕</button>
     </div>
   </div>
 </div>
 
-<footer>
-  서울 ○○초등학교 4학년 4반 · 2025년 사회 탐구 프로젝트
-</footer>
-
 <script>
-// ─────────────────────────────────────────────
-// 데이터: 실제 이미지 파일명으로 교체하세요
-// image: "images/museum/파일명.png"
-// image: null 이면 placeholder
-// ─────────────────────────────────────────────
-const DATA = {
-  museum: {
-    label: "박물관",
-    color: "#6C75E0",
-    icon:  "🏛️",
-    desc:  "역사와 문화를 만나요",
-    places: [
-      {
-        name: "국립중앙박물관",
-        posters: [
-          { student:"송윤제", image:"images/museum/museum_01_songyunje.png" },
-          { student:"지상",   image:"images/museum/museum_02_jisang.png" },
-          { student:"준우",   image:"images/museum/museum_03_junwoo.png" },
-          { student:"세원",   image:"images/museum/museum_04_sewon.png" },
-          { student:"수빈",   image:"images/museum/museum_05_subin.png" },
-          { student:"재훈",   image:"images/museum/museum_06_jaehun.png" },
-          { student:"민준",   image:"images/museum/museum_07_minjun.png" },
-          { student:"단우상", image:"images/museum/museum_08_danwusang.png" },
-          { student:"시윤",   image:"images/museum/museum_09_siyun.png" },
-          { student:"서현",   image:"images/museum/museum_10_seohyun.png" },
-        ]
-      },
-      {
-        name: "국립민속박물관",
-        posters: [
-          { student:"정윤", image:"images/museum/museum_11_jungyun.png" },
-        ]
-      },
-      {
-        name: "국립항공박물관",
-        posters: [
-          { student:"석원", image:"images/museum/museum_12_seokwon.png" },
-          { student:"가은", image:"images/museum/museum_13_gaeun.png" },
-        ]
-      },
-      {
-        name: "대한민국역사박물관",
-        posters: [
-          { student:"태훈", image:"images/museum/museum_14_taehun.png" },
-        ]
-      },
-      {
-        name: "서울역사박물관",
-        posters: [
-          { student:"서하", image:"images/museum/museum_15_seoha.png" },
-        ]
-      },
-      {
-        name: "서울생활사박물관",
-        posters: [
-          { student:"연우",   image:"images/museum/museum_16_yeonwoo.png" },
-          { student:"윤채원", image:"images/museum/museum_17_yunchaewon.png" },
-        ]
-      },
-      {
-        name: "국립한글박물관",
-        posters: [
-          { student:"지한", image:"images/museum/museum_18_jihan.png" },
-        ]
-      },
-      {
-        name: "서울신문박물관",
-        posters: [
-          { student:"승아", image:"images/museum/museum_19_seungah.png" },
-        ]
-      },
-    ]
-  },
-  memorial: {
-    label: "기념관",
-    color: "#E05A30",
-    icon:  "🎖️",
-    desc:  "소중한 기억을 기려요",
-    places: [
-      {
-        name: "전쟁기념관",
-        posters: [
-          { student:"김강준", image:"images/memorial/memorial_01_kimgangjun.png" },
-          { student:"하준",   image:"images/memorial/memorial_02_hajun.png" },
-          { student:"신혁재", image:"images/memorial/memorial_03_shinhyukjae.png" },
-        ]
-      },
-      {
-        name: "서대문형무소",
-        posters: [
-          { student:"해준", image:"images/memorial/memorial_04_haejun.png" },
-          { student:"은설", image:"images/memorial/memorial_05_eunseol.png" },
-          { student:"하을", image:"images/memorial/memorial_06_haeul.png" },
-          { student:"유진", image:"images/memorial/memorial_07_yujin.png" },
-        ]
-      },
-    ]
-  },
-  heritage: {
-    label: "유적지",
-    color: "#3AAA5A",
-    icon:  "🏯",
-    desc:  "옛날 흔적을 찾아요",
-    places: [
-      {
-        name: "한옥마을",
-        posters: [
-          { student:"해빈", image:"images/heritage/heritage_01_haebin.png" },
-        ]
-      },
-      {
-        name: "낙성대공원",
-        posters: [
-          { student:"민경", image:"images/heritage/heritage_02_minkyung.png" },
-        ]
-      },
-      {
-        name: "삼전도비",
-        posters: [
-          { student:"이선우", image:"images/heritage/heritage_03_leesunwoo.png" },
-        ]
-      },
-    ]
-  }
+const BADGE = {
+  museum:   '<span class="badge museum">박물관</span>',
+  memorial: '<span class="badge memorial">기념관</span>',
+  heritage: '<span class="badge heritage">유적지</span>',
 };
 
-// ─────────────────────────────────────────────
-// 렌더링
-// ─────────────────────────────────────────────
 const PLACE_ICONS = {
   "국립중앙박물관":"🏛️","국립민속박물관":"🎭","국립항공박물관":"✈️",
   "대한민국역사박물관":"📖","서울역사박물관":"🌆","서울생활사박물관":"🏘️",
   "국립한글박물관":"✍️","서울신문박물관":"📰",
-  "전쟁기념관":"⚔️","서대문형무소":"🔒",
+  "전쟁기념관":"⚔️","서대문형무소역사관":"🔒",
   "한옥마을":"🏡","낙성대공원":"🗿","삼전도비":"📜"
 };
 
-function buildSection(type) {
-  const cat = DATA[type];
-  const el  = document.getElementById('tab-' + type);
-  let total = 0;
+const TOPICS = {
+  history: {
+    label:"역사", icon:"🏺",
+    greet:["역사 주제를 골랐구나! 🏺","우리나라의 소중한 역사를 만나봐","포스터를 클릭해서 크게 봐봐!"],
+    places:[
+      { name:"국립중앙박물관", type:"museum", posters:[
+        {image:"images/museum/museum_01_songyunje.png"},
+        {image:"images/museum/museum_02_jisang.png"},
+        {image:"images/museum/museum_03_junwoo.png"},
+        {image:"images/museum/museum_04_sewon.png"},
+        {image:"images/museum/museum_05_subin.png"},
+        {image:"images/museum/museum_06_jaehun.png"},
+        {image:"images/museum/museum_07_minjun.png"},
+        {image:"images/museum/museum_08_danwusang.png"},
+        {image:"images/museum/museum_09_siyun.png"},
+        {image:"images/museum/museum_10_seohyun.png"},
+      ]},
+      { name:"대한민국역사박물관", type:"museum",  posters:[{image:"images/museum/museum_14_taehun.png"}]},
+      { name:"서울역사박물관",     type:"museum",  posters:[{image:"images/museum/museum_15_seoha.png"}]},
+      { name:"전쟁기념관",         type:"memorial",posters:[
+        {image:"images/memorial/memorial_01_kimgangjun.png"},
+        {image:"images/memorial/memorial_02_hajun.png"},
+        {image:"images/memorial/memorial_03_shinhyukjae.png"},
+      ]},
+      { name:"서대문형무소역사관",  type:"memorial",posters:[
+        {image:"images/memorial/memorial_04_haejun.png"},
+        {image:"images/memorial/memorial_05_eunseol.png"},
+        {image:"images/memorial/memorial_06_haeul.png"},
+        {image:"images/memorial/memorial_07_yujin.png"},
+      ]},
+      { name:"삼전도비",            type:"heritage",posters:[{image:"images/heritage/heritage_03_leesunwoo.png"}]},
+    ]
+  },
+  science: {
+    label:"과학·기술", icon:"✈️",
+    greet:["과학·기술 주제 선택! ✈️","하늘을 나는 꿈이 담겨있는 곳이야","어떤 포스터가 마음에 들어?"],
+    places:[
+      { name:"국립항공박물관", type:"museum", posters:[
+        {image:"images/museum/museum_12_seokwon.png"},
+        {image:"images/museum/museum_13_gaeun.png"},
+      ]},
+    ]
+  },
+  life: {
+    label:"생활모습", icon:"🏘️",
+    greet:["생활모습 주제구나! 🏘️","옛날 사람들은 어떻게 살았을까?","포스터 속에 답이 있어!"],
+    places:[
+      { name:"서울생활사박물관", type:"museum",  posters:[
+        {image:"images/museum/museum_16_yeonwoo.png"},
+        {image:"images/museum/museum_17_yunchaewon.png"},
+      ]},
+      { name:"국립민속박물관",   type:"museum",  posters:[{image:"images/museum/museum_11_jungyun.png"}]},
+      { name:"서울신문박물관",   type:"museum",  posters:[{image:"images/museum/museum_19_seungah.png"}]},
+      { name:"한옥마을",         type:"heritage",posters:[{image:"images/heritage/heritage_01_haebin.png"}]},
+      { name:"낙성대공원",       type:"heritage",posters:[{image:"images/heritage/heritage_02_minkyung.png"}]},
+    ]
+  },
+  language: {
+    label:"언어·문자", icon:"🔤",
+    greet:["언어·문자 주제 선택! 🔤","한글의 위대함을 느껴봐","포스터를 눌러봐 😊"],
+    places:[
+      { name:"국립한글박물관", type:"museum", posters:[{image:"images/museum/museum_18_jihan.png"}]},
+    ]
+  }
+};
 
-  let html = `<div class="section-label">
-    <div class="section-label-dot" style="background:${cat.color};"></div>
-    <h2>${cat.icon} ${cat.label}</h2>
-    <p>${cat.desc}</p>
-  </div>`;
+const INTRO_MSGS = [
+  "안녕! 나는 서울 역사 탐험대 도우미 🦊",
+  "우리 반 친구들이 직접 조사했어요!",
+  "어떤 주제가 궁금해? 아래에서 골라봐 👇"
+];
 
-  cat.places.forEach(place => {
-    total += place.posters.length;
+let typing = null;
+
+function typeMsg(msg, cb) {
+  const el = document.getElementById('bubbleText');
+  el.innerHTML = '<span class="cursor"></span>';
+  let i = 0;
+  clearInterval(typing);
+  typing = setInterval(() => {
+    if (i <= msg.length) {
+      el.innerHTML = msg.slice(0, i) + '<span class="cursor"></span>';
+      i++;
+    } else {
+      clearInterval(typing);
+      if (cb) setTimeout(cb, 900);
+    }
+  }, 48);
+}
+
+function runMsgs(msgs, idx) {
+  if (idx >= msgs.length) {
+    setTimeout(() => document.getElementById('topicRow').classList.add('show'), 200);
+    return;
+  }
+  typeMsg(msgs[idx], () => runMsgs(msgs, idx + 1));
+}
+
+function selectTopic(type) {
+  const topic = TOPICS[type];
+  document.getElementById('topicRow').classList.remove('show');
+
+  let html = '';
+  topic.places.forEach(place => {
     const icon = PLACE_ICONS[place.name] || '📍';
     html += `<div class="place-group">
-      <div class="place-name-bar">
-        <span class="place-icon">${icon}</span>
-        <h3>${place.name}</h3>
-        <span class="poster-count">${place.posters.length}장</span>
+      <div class="place-bar">
+        <span>${icon}</span>
+        <h3>${place.name}${BADGE[place.type]}</h3>
+        <span class="pcnt">${place.posters.length}장</span>
       </div>
       <div class="poster-grid">`;
-
     place.posters.forEach(p => {
-      const imgPath = p.image || null;
-      const safeStudent = p.student.replace(/'/g,"&#39;");
-      const safeName    = place.name.replace(/'/g,"&#39;");
-      html += `<button class="poster-card"
-          onclick="openLB('${imgPath}','${safeName}')"
-          aria-label="${place.name} 포스터 크게 보기">`;
-      if (imgPath) {
-        html += `<img class="poster-thumb" src="${imgPath}" alt="${place.name} 소개 포스터 (${p.student})" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-          <div class="poster-thumb-placeholder" style="background:#F5F0E8;display:none;">🖼️</div>`;
-      } else {
-        html += `<div class="poster-thumb-placeholder" style="background:#F5F0E8;">${icon}</div>`;
-      }
-      html += `<div class="poster-info">
-          <div class="place-label">${place.name}</div>
-        </div>
-      </button>`;
+      html += `<div class="p-card" onclick="openLB('${p.image}','${place.name}')">
+        <img src="${p.image}" alt="${place.name} 포스터" loading="lazy" onerror="this.parentElement.style.display='none'">
+        <div class="p-name">${place.name}</div>
+      </div>`;
     });
-
     html += `</div></div>`;
   });
 
-  el.innerHTML = html;
-  document.getElementById('cnt-' + type).textContent = total;
+  document.getElementById('posterContent').innerHTML = html;
+  const sec = document.getElementById('posterSection');
+  sec.style.display = 'block';
+  setTimeout(() => sec.classList.add('show'), 30);
+
+  let i = 0;
+  const next = () => { if (i < topic.greet.length) typeMsg(topic.greet[i++], next); };
+  next();
 }
 
-Object.keys(DATA).forEach(buildSection);
-
-// ─────────────────────────────────────────────
-// 탭 전환
-// ─────────────────────────────────────────────
-function switchTab(type, btn) {
-  document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  btn.classList.add('active');
-  btn.setAttribute('aria-selected','true');
-  document.getElementById('tab-' + type).classList.add('active');
+function goBack() {
+  const sec = document.getElementById('posterSection');
+  sec.classList.remove('show');
+  setTimeout(() => {
+    sec.style.display = 'none';
+    document.getElementById('topicRow').classList.add('show');
+    typeMsg("어떤 주제가 궁금해? 아래에서 골라봐 👇");
+  }, 400);
 }
 
-// ─────────────────────────────────────────────
-// 라이트박스
-// ─────────────────────────────────────────────
-function openLB(imgPath, name) {
-  const lb    = document.getElementById('lightbox');
-  const img   = document.getElementById('lb-img');
-  const ph    = document.getElementById('lb-placeholder');
-  document.getElementById('lb-name').textContent    = name;
-  document.getElementById('lb-student').textContent = '';
-  if (imgPath) {
-    img.src = imgPath; img.alt = name + ' 포스터';
-    img.style.display = 'block'; ph.style.display = 'none';
-    img.onerror = () => { img.style.display='none'; ph.style.display='flex'; ph.textContent='🖼️'; };
-  } else {
-    img.style.display = 'none'; ph.style.display = 'flex'; ph.textContent = '🖼️';
-  }
-  lb.classList.add('open');
+function openLB(src, name) {
+  document.getElementById('lbImg').src = src;
+  document.getElementById('lbName').textContent = name;
+  document.getElementById('lb').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 function closeLB() {
-  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lb').classList.remove('open');
   document.body.style.overflow = '';
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLB(); });
+
+runMsgs(INTRO_MSGS, 0);
 </script>
 </body>
 </html>
