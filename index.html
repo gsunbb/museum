@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🗺️ 서울 역사 탐방 — 우리가 만든 소개 포스터</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --museum-bg:   #EEF0FF;
+      --museum-mid:  #6C75E0;
+      --museum-dark: #3A3FA0;
+      --memorial-bg: #FFF0EC;
+      --memorial-mid:#E05A30;
+      --memorial-dark:#9C3310;
+      --heritage-bg: #EDFAF0;
+      --heritage-mid:#3AAA5A;
+      --heritage-dark:#1E6E35;
+      --cream: #FFFDF7;
+      --ink:   #1A1A1A;
+      --muted: #6B6B6B;
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: var(--cream);
+      color: var(--ink);
+      min-height: 100vh;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 3rem 1.5rem 2rem;
+      background: linear-gradient(180deg, #FFF8E7 0%, var(--cream) 100%);
+      border-bottom: 2px dashed #E8D8A0;
+    }
+    .hero-stamp {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      color: #A07830;
+      background: #FFF0C0;
+      border: 2px solid #E8C860;
+      border-radius: 999px;
+      padding: 4px 14px;
+      margin-bottom: 14px;
+    }
+    .hero h1 {
+      font-size: clamp(26px, 5vw, 42px);
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+    .hero-sub {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+
+    /* ── TAB BAR ── */
+    .tab-bar {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .tab-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      border: 3px solid transparent;
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .18s;
+      outline: none;
+    }
+    .tab-btn .icon { font-size: 20px; }
+    .tab-btn .cnt {
+      background: rgba(0,0,0,.12);
+      border-radius: 999px;
+      padding: 1px 8px;
+      font-size: 12px;
+    }
+
+    .tab-btn.museum   { background: var(--museum-bg);   color: var(--museum-dark);   border-color: var(--museum-bg); }
+    .tab-btn.memorial { background: var(--memorial-bg); color: var(--memorial-dark); border-color: var(--memorial-bg); }
+    .tab-btn.heritage { background: var(--heritage-bg); color: var(--heritage-dark); border-color: var(--heritage-bg); }
+
+    .tab-btn.museum.active,   .tab-btn.museum:hover   { background: var(--museum-mid);   color: #fff; border-color: var(--museum-mid); }
+    .tab-btn.memorial.active, .tab-btn.memorial:hover { background: var(--memorial-mid); color: #fff; border-color: var(--memorial-mid); }
+    .tab-btn.heritage.active, .tab-btn.heritage:hover { background: var(--heritage-mid); color: #fff; border-color: var(--heritage-mid); }
+
+    /* ── SECTION ── */
+    .section { display: none; padding: 2rem 1.5rem 4rem; max-width: 1100px; margin: 0 auto; }
+    .section.active { display: block; }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.5rem;
+    }
+    .section-label-dot {
+      width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0;
+    }
+    .section-label h2 { font-size: 20px; font-weight: 900; }
+    .section-label p  { font-size: 13px; color: var(--muted); margin-left: auto; }
+
+    /* ── PLACE GROUPS ── */
+    .place-group { margin-bottom: 2.5rem; }
+    .place-name-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #E8E0D0;
+    }
+    .place-name-bar .place-icon { font-size: 18px; }
+    .place-name-bar h3 { font-size: 17px; font-weight: 700; }
+    .place-name-bar .poster-count {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* ── POSTER GRID ── */
+    .poster-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
+    }
+
+    .poster-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 2px solid #E8E0D0;
+      background: #fff;
+      cursor: pointer;
+      transition: transform .15s, box-shadow .15s, border-color .15s;
+      text-decoration: none;
+      display: block;
+    }
+    .poster-card:hover {
+      transform: translateY(-4px) rotate(.5deg);
+      box-shadow: 0 8px 24px rgba(0,0,0,.12);
+      border-color: #C0B080;
+    }
+    .poster-card:focus { outline: 3px solid #6C75E0; outline-offset: 2px; }
+
+    .poster-thumb {
+      width: 100%;
+      aspect-ratio: 210/297;
+      object-fit: cover;
+      display: block;
+    }
+    .poster-thumb-placeholder {
+      width: 100%;
+      aspect-ratio: 210/297;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 28px;
+    }
+    .poster-info {
+      padding: 8px 10px 10px;
+      border-top: 1px solid #F0E8D8;
+    }
+    .poster-info .place-label {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(10,8,5,.85);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox-inner {
+      position: relative;
+      max-width: 540px;
+      width: 100%;
+      background: #fff;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,.5);
+    }
+    .lightbox-img {
+      width: 100%;
+      max-height: 80vh;
+      object-fit: contain;
+      display: block;
+    }
+    .lightbox-img-placeholder {
+      width: 100%;
+      aspect-ratio: 210/297;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+    .lightbox-footer {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid #F0E8D8;
+    }
+    .lightbox-footer .lb-name  { font-size: 16px; font-weight: 700; }
+    .lightbox-footer .lb-student { font-size: 13px; color: var(--muted); }
+    .lightbox-close {
+      background: var(--ink);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 8px 16px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .lightbox-close:hover { background: #444; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      font-size: 13px;
+      color: #B0A080;
+      border-top: 2px dashed #E8D8A0;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 480px) {
+      .tab-btn { padding: 10px 14px; font-size: 13px; }
+      .poster-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-stamp">4학년 4반 사회 탐구 프로젝트</div>
+  <h1>🗺️ 서울 역사 탐방</h1>
+  <p class="hero-sub">우리가 직접 조사하고 만든 소개 포스터예요!</p>
+  <nav class="tab-bar" role="tablist">
+    <button class="tab-btn museum active" role="tab" aria-selected="true"  onclick="switchTab('museum',this)">
+      <span class="icon">🏛️</span> 박물관 <span class="cnt" id="cnt-museum">0</span>
+    </button>
+    <button class="tab-btn memorial" role="tab" aria-selected="false" onclick="switchTab('memorial',this)">
+      <span class="icon">🎖️</span> 기념관 <span class="cnt" id="cnt-memorial">0</span>
+    </button>
+    <button class="tab-btn heritage" role="tab" aria-selected="false" onclick="switchTab('heritage',this)">
+      <span class="icon">🏯</span> 유적지 <span class="cnt" id="cnt-heritage">0</span>
+    </button>
+  </nav>
+</header>
+
+<main>
+  <div class="section active" id="tab-museum" role="tabpanel"></div>
+  <div class="section"        id="tab-memorial" role="tabpanel"></div>
+  <div class="section"        id="tab-heritage" role="tabpanel"></div>
+</main>
+
+<div class="lightbox" id="lightbox" onclick="if(event.target===this)closeLB()">
+  <div class="lightbox-inner">
+    <img class="lightbox-img" id="lb-img" src="" alt="" style="display:none;">
+    <div class="lightbox-img-placeholder" id="lb-placeholder" style="display:none;"></div>
+    <div class="lightbox-footer">
+      <div>
+        <div class="lb-name"    id="lb-name"></div>
+        <div class="lb-student" id="lb-student"></div>
+      </div>
+      <button class="lightbox-close" onclick="closeLB()">닫기 ✕</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  서울 ○○초등학교 4학년 4반 · 2025년 사회 탐구 프로젝트
+</footer>
+
+<script>
+// ─────────────────────────────────────────────
+// 데이터: 실제 이미지 파일명으로 교체하세요
+// image: "images/museum/파일명.png"
+// image: null 이면 placeholder
+// ─────────────────────────────────────────────
+const DATA = {
+  museum: {
+    label: "박물관",
+    color: "#6C75E0",
+    icon:  "🏛️",
+    desc:  "역사와 문화를 만나요",
+    places: [
+      {
+        name: "국립중앙박물관",
+        posters: [
+          { student:"송윤제", image:"images/museum/museum_01_songyunje.png" },
+          { student:"지상",   image:"images/museum/museum_02_jisang.png" },
+          { student:"준우",   image:"images/museum/museum_03_junwoo.png" },
+          { student:"세원",   image:"images/museum/museum_04_sewon.png" },
+          { student:"수빈",   image:"images/museum/museum_05_subin.png" },
+          { student:"재훈",   image:"images/museum/museum_06_jaehun.png" },
+          { student:"민준",   image:"images/museum/museum_07_minjun.png" },
+          { student:"단우상", image:"images/museum/museum_08_danwusang.png" },
+          { student:"시윤",   image:"images/museum/museum_09_siyun.png" },
+          { student:"서현",   image:"images/museum/museum_10_seohyun.png" },
+        ]
+      },
+      {
+        name: "국립민속박물관",
+        posters: [
+          { student:"정윤", image:"images/museum/museum_11_jungyun.png" },
+        ]
+      },
+      {
+        name: "국립항공박물관",
+        posters: [
+          { student:"석원", image:"images/museum/museum_12_seokwon.png" },
+          { student:"가은", image:"images/museum/museum_13_gaeun.png" },
+        ]
+      },
+      {
+        name: "대한민국역사박물관",
+        posters: [
+          { student:"태훈", image:"images/museum/museum_14_taehun.png" },
+        ]
+      },
+      {
+        name: "서울역사박물관",
+        posters: [
+          { student:"서하", image:"images/museum/museum_15_seoha.png" },
+        ]
+      },
+      {
+        name: "서울생활사박물관",
+        posters: [
+          { student:"연우",   image:"images/museum/museum_16_yeonwoo.png" },
+          { student:"윤채원", image:"images/museum/museum_17_yunchaewon.png" },
+        ]
+      },
+      {
+        name: "국립한글박물관",
+        posters: [
+          { student:"지한", image:"images/museum/museum_18_jihan.png" },
+        ]
+      },
+      {
+        name: "서울신문박물관",
+        posters: [
+          { student:"승아", image:"images/museum/museum_19_seungah.png" },
+        ]
+      },
+    ]
+  },
+  memorial: {
+    label: "기념관",
+    color: "#E05A30",
+    icon:  "🎖️",
+    desc:  "소중한 기억을 기려요",
+    places: [
+      {
+        name: "전쟁기념관",
+        posters: [
+          { student:"김강준", image:"images/memorial/memorial_01_kimgangjun.png" },
+          { student:"하준",   image:"images/memorial/memorial_02_hajun.png" },
+          { student:"신혁재", image:"images/memorial/memorial_03_shinhyukjae.png" },
+        ]
+      },
+      {
+        name: "서대문형무소",
+        posters: [
+          { student:"해준", image:"images/memorial/memorial_04_haejun.png" },
+          { student:"은설", image:"images/memorial/memorial_05_eunseol.png" },
+          { student:"하을", image:"images/memorial/memorial_06_haeul.png" },
+          { student:"유진", image:"images/memorial/memorial_07_yujin.png" },
+        ]
+      },
+    ]
+  },
+  heritage: {
+    label: "유적지",
+    color: "#3AAA5A",
+    icon:  "🏯",
+    desc:  "옛날 흔적을 찾아요",
+    places: [
+      {
+        name: "한옥마을",
+        posters: [
+          { student:"해빈", image:"images/heritage/heritage_01_haebin.png" },
+        ]
+      },
+      {
+        name: "낙성대공원",
+        posters: [
+          { student:"민경", image:"images/heritage/heritage_02_minkyung.png" },
+        ]
+      },
+      {
+        name: "삼전도비",
+        posters: [
+          { student:"이선우", image:"images/heritage/heritage_03_leesunwoo.png" },
+        ]
+      },
+    ]
+  }
+};
+
+// ─────────────────────────────────────────────
+// 렌더링
+// ─────────────────────────────────────────────
+const PLACE_ICONS = {
+  "국립중앙박물관":"🏛️","국립민속박물관":"🎭","국립항공박물관":"✈️",
+  "대한민국역사박물관":"📖","서울역사박물관":"🌆","서울생활사박물관":"🏘️",
+  "국립한글박물관":"✍️","서울신문박물관":"📰",
+  "전쟁기념관":"⚔️","서대문형무소":"🔒",
+  "한옥마을":"🏡","낙성대공원":"🗿","삼전도비":"📜"
+};
+
+function buildSection(type) {
+  const cat = DATA[type];
+  const el  = document.getElementById('tab-' + type);
+  let total = 0;
+
+  let html = `<div class="section-label">
+    <div class="section-label-dot" style="background:${cat.color};"></div>
+    <h2>${cat.icon} ${cat.label}</h2>
+    <p>${cat.desc}</p>
+  </div>`;
+
+  cat.places.forEach(place => {
+    total += place.posters.length;
+    const icon = PLACE_ICONS[place.name] || '📍';
+    html += `<div class="place-group">
+      <div class="place-name-bar">
+        <span class="place-icon">${icon}</span>
+        <h3>${place.name}</h3>
+        <span class="poster-count">${place.posters.length}장</span>
+      </div>
+      <div class="poster-grid">`;
+
+    place.posters.forEach(p => {
+      const imgPath = p.image || null;
+      const safeStudent = p.student.replace(/'/g,"&#39;");
+      const safeName    = place.name.replace(/'/g,"&#39;");
+      html += `<button class="poster-card"
+          onclick="openLB('${imgPath}','${safeName}')"
+          aria-label="${place.name} 포스터 크게 보기">`;
+      if (imgPath) {
+        html += `<img class="poster-thumb" src="${imgPath}" alt="${place.name} 소개 포스터 (${p.student})" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+          <div class="poster-thumb-placeholder" style="background:#F5F0E8;display:none;">🖼️</div>`;
+      } else {
+        html += `<div class="poster-thumb-placeholder" style="background:#F5F0E8;">${icon}</div>`;
+      }
+      html += `<div class="poster-info">
+          <div class="place-label">${place.name}</div>
+        </div>
+      </button>`;
+    });
+
+    html += `</div></div>`;
+  });
+
+  el.innerHTML = html;
+  document.getElementById('cnt-' + type).textContent = total;
+}
+
+Object.keys(DATA).forEach(buildSection);
+
+// ─────────────────────────────────────────────
+// 탭 전환
+// ─────────────────────────────────────────────
+function switchTab(type, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  btn.classList.add('active');
+  btn.setAttribute('aria-selected','true');
+  document.getElementById('tab-' + type).classList.add('active');
+}
+
+// ─────────────────────────────────────────────
+// 라이트박스
+// ─────────────────────────────────────────────
+function openLB(imgPath, name) {
+  const lb    = document.getElementById('lightbox');
+  const img   = document.getElementById('lb-img');
+  const ph    = document.getElementById('lb-placeholder');
+  document.getElementById('lb-name').textContent    = name;
+  document.getElementById('lb-student').textContent = '';
+  if (imgPath) {
+    img.src = imgPath; img.alt = name + ' 포스터';
+    img.style.display = 'block'; ph.style.display = 'none';
+    img.onerror = () => { img.style.display='none'; ph.style.display='flex'; ph.textContent='🖼️'; };
+  } else {
+    img.style.display = 'none'; ph.style.display = 'flex'; ph.textContent = '🖼️';
+  }
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeLB() {
+  document.getElementById('lightbox').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLB(); });
+</script>
+</body>
+</html>
